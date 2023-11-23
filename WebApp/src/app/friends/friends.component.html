@@ -1,0 +1,59 @@
+<app-navbar></app-navbar>
+<button class="btn btn-primary mt-3" type="button" data-bs-toggle="offcanvas" data-bs-target="#staticBackdrop"
+    aria-controls="staticBackdrop">
+    Buscar Usuarios
+</button>
+
+
+<div class="mt-3 row justify-content-center">
+    <div class="mt-1 mb-2 row justify-content-center" *ngFor="let f of friend; let i index">
+        <div class="card mb-3" style="max-width: 540px;">
+            <div class="row g-0">
+                <div class="col-md-4">
+                    <img [src]="friendImagesBlob.get(f.user)" alt="User profile picture" class="round-circle">
+
+                    <ng-template #noImageFound>
+                        <img src="assets\generic_user_icon.png" alt="Fallbackimage" class="round-circle">
+                    </ng-template>
+                </div>
+
+                <div class="col-md-8">
+                    <div class="card-body">
+                        <h5 class="card-title">{{f.user}}</h5>
+                        <p class="card-text">{{f.firstName}} {{f.lastName1}}</p>
+                        <p class="card-text">{{f.birthDate}} años</p>
+                        <a class="btn btn-primary" (click)="deleteFriend(i)">Dejar de Seguir</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="offcanvas offcanvas-start" data-bs-backdrop="static" tabindex="-1" id="staticBackdrop"
+    aria-labelledby="staticBackdropLabel">
+    <div class="offcanvas-header">
+        <h5 class="offcanvas-title" id="staticBackdropLabel">Buscar Usuarios</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+    </div>
+    <div class="offcanvas-body">
+        <div>
+            <form class="d-flex" role="search">
+                <input class="form-control me-2" type="search" [(ngModel)]="userToFind"
+                    [ngModelOptions]="{standalone: true}" placeholder="Search" aria-label="Search">
+                <button class="btn btn-outline-success" type="submit" (click)="searchUser()">Buscar</button>
+            </form>
+
+        </div>
+        <div class="mt-1 mb-2 row justify-content-center" *ngFor="let usr of userToShow; let i index">
+            <div class="card mb-3" style="max-width: 540px;">
+
+                <div class="card-body">
+                    <h5 class="card-title">{{usr.user}}</h5>
+                    <p class="card-text">{{usr.firstName}} {{usr.lastName1}} {{usr.lastName2}}</p>
+                    <p class="card-text">{{usr.nationality}}</p>
+                    <a class="btn btn-primary" (click)="follow(i)">Seguir</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,29 @@
+.form {
+    width: 450px;
+  }
+  
+  .btn-primary {
+    --bs-btn-font-weight: 600;
+    --bs-btn-color: var(--bs-white);
+    --bs-btn-bg: #0b1530;
+    --bs-btn-border-color: #0b1530;
+    --bs-btn-border-radius: .5rem;
+    --bs-btn-hover-bg: #f4312d;
+    --bs-btn-hover-border-color: #f4312d;
+    --bs-btn-active-bg: #0b1530;
+    --bs-btn-active-shadow: #0b1530;
+    --bs-btn-focus-shadow-rgb: to-rgb(#0b1530);
+  }
+  
+  .round-circle {
+    border-radius: 50%;
+    width: 170px;
+    height: 170px;
+    border: 5px solid #0b1530;
+  }
+
+  button {
+    display: block;
+    margin: auto;
+    padding: 30px 40px;
+  }

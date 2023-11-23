@@ -1,0 +1,9 @@
+body {
+    font-family: 'Roboto', sans-serif;
+    background-color: #000;
+}
+
+button:hover{
+    scale: 1.1;
+    border-radius: 15%;
+}

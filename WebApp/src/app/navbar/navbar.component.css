@@ -1,0 +1,60 @@
+.btn-primary {
+    --bs-btn-font-weight: 600;
+    --bs-btn-color: var(--bs-white);
+    --bs-btn-bg: #0b1530;
+    --bs-btn-border-color: #0b1530;
+    --bs-btn-border-radius: .5rem;
+    --bs-btn-hover-bg: #f4312d;
+    --bs-btn-hover-border-color: #f4312d;
+    --bs-btn-active-bg:#0b1530;
+    --bs-btn-active-shadow:#0b1530;
+    --bs-btn-active-border-color:#0b1530;
+    --bs-btn-focus-shadow-rgb:to-rgb(#0b1530);
+    margin-right: 50px;
+    transition: all 0.5s ease;
+}
+  .btn-outline-success {
+    --bs-btn-font-weight: 600;
+    --bs-btn-color:  #0b1530;
+    --bs-btn-bg: var(--bd-violet);
+    --bs-btn-border-color:  #0b1530;;
+    --bs-btn-border-radius: .5rem;
+    --bs-btn-hover-color: var(--bs-white);
+    --bs-btn-hover-bg:  #0b1530;
+    --bs-btn-hover-border-color: #0b1530;
+    transition: all 0.5s ease;
+  }
+
+
+nav .navbar-nav li a{
+  color: #0b1530;
+  font-weight: bolder;
+  font-size: 1.2rem;
+  cursor: pointer;
+  transition: all 0.5s ease;
+  margin-right: 40px;
+}
+
+nav .navbar-nav li a:hover{
+  color: #f4312d;
+  scale: 1.1;
+  text-shadow: #f4312d 0px 0px 10px ;
+
+}
+
+nav {
+  border: 5px solid #0b1530;
+  box-shadow: 0px 0px 10px #0b1530;
+}
+
+.navbar-logo {
+  height: 120px;
+  width: 120px;
+  margin-right: 20px;
+  cursor: pointer;
+  transition: all 0.5s ease;
+}
+
+.navbar-logo:hover {
+  scale: 1.1;
+}

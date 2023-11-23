@@ -1,0 +1,86 @@
+<app-navbar></app-navbar>
+
+<div class="container-fluid">
+  <div class="row justify-content-between">
+
+    <div class="col-2 d-flex justify-content-center mt-3">
+      <div class="well">
+        <div class="card p-3">
+          <img [src]="userImage" alt="User profile picture" *ngIf="!isImageLoading; else noImageFound"
+            class="round-circle">
+          <ng-template #noImageFound>
+            <img src="assets\generic_user_icon.png" alt="Fallbackimage" class="round-circle">
+          </ng-template>
+          <h5 class="card-title text-center mt-3">{{sharedService.getUserData().FirstName}}
+            {{sharedService.getUserData().LastName1}}</h5>
+          <p class="card-text text-center">{{sharedService.getUserData().User}}</p>
+          <button class="btn btn-link" (click)="editUser()">Editar</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-8 justify-content-center">
+      <div class="well">
+        <div class="abs-center mt-3" *ngFor="let activity of activities; let i = index">
+          <div class="card w-75">
+            <div class="card-header">
+              {{activity.User}}
+            </div>
+            <div class="card-body ">
+              <h5 class="card-title text-center">{{activity.Type}}</h5>
+              <p class="card-text">Comienzo: {{activity.Start}}</p>
+              <p class="card-text">Distancia: {{activity.Distance}}</p>
+
+              <div style="margin:10px auto; width:100%;">
+                <app-map [lat]="42.443592" [lon]="-71.106301" [zoom]="12" [idMap]="activity.Route" width="100%"
+                  height="300px">
+                </app-map>
+              </div>
+
+            </div>
+            <div class="card-footer bg-transparent ">
+              <button class="btn btn-link" type="button" id="commentBtn" data-bs-toggle="modal"
+                data-bs-target="#exampleModal" (click)="getCommentsByActivity(i)">
+                Comentarios
+              </button>
+            </div>
+
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+
+</div>
+
+
+
+<div class="modal fade" id="exampleModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+  aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Comentarios</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"
+          (click)="hideComments()"></button>
+      </div>
+      <div class="modal-body">
+        <div *ngFor="let comment of comments; let i = index">
+          <p class="card-text"> {{comment.user}}: {{comment.body}}</p>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <div class="input-group mb-3">
+          <input #Comment type="text" class="form-control" placeholder="Comment" aria-label="Comment"
+            aria-describedby="button-addon2">
+          <button class="btn btn-primary" type="button" id="button-addon2"
+            (click)="addComment(Comment.value)">Enviar</button>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>

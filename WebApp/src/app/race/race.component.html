@@ -1,0 +1,234 @@
+<app-navbar></app-navbar>
+<div class="container">
+  <div class="col-auto">
+    <div class="paypopup" id="paypopup">
+      <form class="formContainer" id="paypopupform">
+        <h2>Ingrese comprobante de pago</h2>
+        <br/>
+        <input type="text" placeholder="Voucher de compra">
+        <br/>
+        <br/>
+        <br/>
+        <button type="button" style = "margin: 0px 2px;" class="btn btn-primary" (click)="paycloseForm()">Cerrar</button>
+      </form>
+    </div>
+    <button class="btn btn-primary mt-3" type="button" (click)="payopenForm()">
+      Carreras a pagar
+    </button>
+  </div>
+  <div class="abs-center mt-3" *ngFor="let race of races; let i = index">
+    <div class="card w-50">
+      <div class="card-header">
+        Dueño: {{race.userAdmin}}
+      </div>
+      <div class="card-body text-center">
+        <h5 class="card-title">{{race.name}}</h5>
+        <p class="card-text">Categoría: {{race.category}}</p>
+        <p class="card-text">{{race.activity_Type}}</p>
+        <p class="card-text">Fecha Inicio {{race.startDate}} </p>
+        <p class="card-text">Coste: {{race.cost}}$ </p>
+        <p class="card-text">Ruta: {{race.route}} </p>
+
+        <input type="button" (click)="openForm(race.Id)" style = "margin: 0px 2px;" class="btn btn-primary"  value="" />
+
+        
+          <div class="registerpopup" id="registerpopup">
+            <form class="formContainer" id="registerpopupform">
+              <h2>Seleccione Categoría</h2>
+              <select [(ngModel)]="optionselect" id="usr-slct" name="optionselect">
+                <option [ngValue]="null" disabled>Seleccione Categoría</option>
+                <option *ngFor="let category of categories" [ngValue]="category.name">{{category.name}}</option>
+              </select>
+              <br/>
+              <br/>
+              <button type="button" style = "margin: 0px 2px;" class="btn btn-primary" (click)="submitForm()" >Registrar</button>
+              <button type="button" style = "margin: 0px 20px;" class="btn btn-primary" (click)="closeForm()">Cerrar</button>
+            </form>
+          </div>
+        
+
+        <div class="wrapper" id="printableArea{{i}}" >
+          <div class="tabless">
+            <div class="rows header">
+              <div class="cell">
+                Primer Nombre
+              </div>
+              <div class="cell">
+                Apellido
+              </div>
+              <div class="cell">
+                Edad
+              </div>
+              <div class="cell">
+                Categoría
+              </div>
+            </div>
+            <div class="rows"  *ngFor="let item of participants; let o = index">
+              <div class="cell" data-title="FirstName">
+                {{item.FirstName}}
+              </div>
+              <div class="cell" data-title="LastName">
+                {{item.LastName}}
+              </div>
+              <div class="cell" data-title="Age">
+                {{item.Age}}
+              </div>
+              <div class="cell" data-title="CategoryName">
+                {{item.CategoryName}}
+              </div>
+            </div>
+          </div>
+        </div>
+      
+        <input type="button" style = "margin: 0px 2px;" class="btn btn-primary" (click)="printDiv(i, race.Id)" value="Pacticipants" />
+
+        <div class="wrapper" id="Area{{i}}" >
+          <div class="tabless">
+            <div class="rows header">
+              <div class="cell">
+                Primer Nombre
+              </div>
+              <div class="cell">
+                Apellido
+              </div>
+              <div class="cell">
+                Edad
+              </div>
+              <div class="cell">
+                Duración
+              </div>
+              <div class="cell">
+                Categoría
+              </div>
+            </div>
+            <div class="rows"  *ngFor="let record of records; let o = index">
+              <div class="cell" data-title="FirstName">
+                {{record.FirstName}}
+              </div>
+              <div class="cell" data-title="LastName">
+                {{record.LastName}}
+              </div>
+              <div class="cell" data-title="Age">
+                {{record.Age}}
+              </div>
+              <div class="cell" data-title="Duration">
+                {{record.Duration}}
+              </div>
+              <div class="cell" data-title="CategoryName">
+                {{record.CategoryName}}
+              </div>
+            </div>
+          </div>
+        </div>
+      
+        <input type="button" style = "margin: 0px 2px;" class="btn btn-primary" (click)="printRecord(-i, race.Id)" value="Record" />
+        
+      </div>
+    </div>
+  </div>
+  
+  
+
+
+
+<div class="offcanvas offcanvas-start" data-bs-backdrop="static" tabindex="-1" id="staticBackdrop"
+  aria-labelledby="staticBackdropLabel">
+  <div class="offcanvas-header ">
+    <h5 class="offcanvas-title " id="staticBackdropLabel">Crear una Carrera</h5>
+    <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+  </div>
+  <div class="offcanvas-body">
+    <div>
+      <form [formGroup]="form" (submit)="getRace()" style="max-width: 300px;margin: auto;">
+
+        <div class="form-floating">
+          <input required type="text" id="raceName" class="form-control mb-1"
+            formControlName="Name">
+          <label for="floatingInput">Nombre Carrera</label>
+        </div>
+
+        <div>
+          <label for="inputGroupFile02" class="text-left ">Ruta</label>
+          <div class="input-group">
+            <input required (change)="getFile($event)" type="file" accept="image/*" class="form-control mb-3"
+              id="inputGroupFile02">
+          </div>
+        </div>
+
+        <div class="form-floating">
+          <input required type="number" id="cost" class="form-control mb-1"
+            formControlName="Cost">
+          <label for="floatingInput">Costo </label>
+        </div>
+        
+        <div class="form-check">
+          <input class="form-check-input" type="checkbox" value="0" id="privacy" formControlName="Privacy" (change)="private()">
+          <label class="form-check-label" for="flexCheckDefault">
+            Privado
+          </label>
+        </div>
+        
+        <div *ngIf="isPrivate">
+          <div formArrayName="GroupsArray" *ngFor="let group of GroupsArray.controls; let i= index">
+            <div [formGroupName]="i">
+              <div class="form-floating flex-grow-1 input-group mb-3 mt-2">
+                <input id="group" class="form-control " type="text" formControlName="GroupsArray" >
+                <label for="floatingInput">Group</label>
+                <button type="button" id="button-addon1" class="btn btn-outline-danger" (click)="deleteGroup(i)">Eliminar
+                  Group</button>
+              </div>
+        
+            </div>
+          </div>
+          <button type="button" id="button-addon1" class="btn btn-sm btn-primary btn-block" (click)="addGroup()">Añadir
+            Grupo</button>
+        </div>
+
+        <div>
+          <label for="floatingInput">Start Day</label>
+          <input required type="datetime-local" id="Start" class="form-control mb-2" [(ngModel)]="start"
+            [ngModelOptions]="{standalone: true}">
+        </div>
+
+        <label>Category</label>
+        <div class="form-floating mb-2">
+          <select class="form-select" [(ngModel)]="category" [ngModelOptions]="{standalone: true}"
+            aria-label="Default select example" multiple>
+            <option value="Junior" selected>Junior</option>
+            <option value="Sub-23">Sub-23</option>
+            <option value="Open">Open</option>
+            <option value="Elite">Elite</option>
+            <option value="Master A">Master A</option>
+            <option value="Master B">Master B</option>
+            <option value="Master C">Master C</option>
+          </select>
+        </div>
+
+        <div class="form-floating">
+          <select class="form-select" [(ngModel)]="type" [ngModelOptions]="{standalone: true}"
+            aria-label="Default select example">
+            <option value="Running" selected>Corre</option>
+            <option value="Swimming">Natación</option>
+            <option value="Cycling">Ciclismo</option>
+            <option value="Hiking">Senderismo</option>
+            <option value="Kayaking">Kayaking</option>
+            <option value="Walking">Caminata</option>
+          </select>
+          <label for="floatingSelect">Tipo</label>
+        </div>
+
+
+        <div style="margin-top:20px" *ngIf="alert" class="alert alert-{{typeAlert}} alert-dismissible" role="alert">
+          {{alertMessage}}
+          <button (click)="closeAlert()" type="button" class="btn-close" data-bs-dismiss="alert"
+            aria-label="Close"></button>
+        </div>
+
+        <div class="mt-3 mb-5 d-grid gap-2 justify-content-center">
+          <button id="signUp" class="btn btn-lg btn-primary btn-block">Crear</button>
+
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

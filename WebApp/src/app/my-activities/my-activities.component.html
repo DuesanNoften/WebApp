@@ -1,0 +1,250 @@
+<app-navbar></app-navbar>
+
+
+<button class="btn btn-primary mt-3 d-grid gap-2 d-md-flex justify-content-md-end" type="button"
+    data-bs-toggle="offcanvas" data-bs-target="#staticBackdrop" aria-controls="staticBackdrop">
+    Subir Actividad
+</button>
+
+
+<div class="mt-3 row justify-content-center">
+    <div class="mt-1 mb-2 row justify-content-center" *ngFor="let act of activity; let i index">
+        <div class="card mb-3" style="max-width: 540px;">
+            <div class="row g-0">
+
+                <div class="card-body">
+                    <h5 class="card-title">{{act.Type}} Actividad</h5>
+                    <p class="card-text">Inicio: {{act.Start}} </p>
+                    <p class="card-text">Duración: {{act.Duration}} </p>
+                    <div style="margin:10px auto; width:100%;">
+                        <app-map [lat]="42.443592" [lon]="-71.106301" [zoom]="12" [idMap]="act.Route" width="100%"
+                            height="300px">
+                        </app-map>
+                    </div>
+
+                </div>
+
+                <div class="card-footer">
+                    <button class="btn btn-link" type="button" id="commentBtn" data-bs-toggle="modal"
+                data-bs-target="#exampleModal" (click)="editActivity(i)">
+                Editar
+              </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="offcanvas offcanvas-start" data-bs-backdrop="static" tabindex="-1" id="staticBackdrop"
+    aria-labelledby="staticBackdropLabel">
+    <div class="offcanvas-header">
+        <h5 class="offcanvas-title" id="staticBackdropLabel">Dinos lo que quieres compartir!</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+    </div>
+    <div class="offcanvas-body">
+        <form [formGroup]="form" (submit)="getActivity()" style="max-width: 300px;margin: auto;">
+
+            <div class="form-floating">
+                <input required type="text" id="name" placeholder="Nombre" class="form-control mb-1"
+                    formControlName="Nombre">
+                <label for="floatingInput">Nombre</label>
+            </div>
+
+            <div class="floatingInput">
+                <input required type="text" id="distance" placeholder="Distancia" class="form-control mb-1"
+                    formControlName="Distance">
+                <label for="floatingInput">Distancia</label>
+            </div>
+
+            <div>
+                <label for="floatingInput">Fecha Inicio</label>
+                <input required type="datetime-local" id="Start" class="form-control mb-2" [(ngModel)]="start"
+                    [ngModelOptions]="{standalone: true}">
+            </div>
+
+            <div>
+                <label for="floatingInput">Tiempo de la Actividad</label>
+                <input required type="datetime-local" [(ngModel)]="duration" [ngModelOptions]="{standalone: true}"
+                    id="Duration" class="form-control mb-1">
+            </div>
+
+
+            <div>
+                <label for="inputGroupFile02" class="text-left ">Ruta</label>
+                <div class="input-group">
+                    <input required (change)="getFile($event)" type="file" accept="text/gpx" class="form-control mb-3"
+                        id="inputGroupFile02">
+                </div>
+            </div>
+
+
+            <div class="form-floating">
+
+                <select class="form-select" [(ngModel)]="activityType" [ngModelOptions]="{standalone: true}"
+                    aria-label="Default select example">
+
+                    <option value="Running" selected>Correr</option>
+                    <option value="Swimming">Natación</option>
+                    <option value="Cycling">Ciclismo</option>
+                    <option value="Hiking">Senderismo</option>
+                    <option value="Kayaking">Kayaking</option>
+                    <option value="Walking">Caminata</option>
+                </select>
+                <label for="floatingSelect">Tipo</label>
+            </div>
+
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="checkbox" id="inlineCheckbox1" value="Challenge"
+                    (click)="challenge($event)" >
+                <label class="form-check-label" for="inlineCheckbox1">Reto</label>
+            </div>
+
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="checkbox" id="inlineCheckbox2" value="Race" (click)="race($event)">
+                <label class="form-check-label" for="inlineCheckbox2">Carrera</label>
+            </div>
+
+            <div class="form-floating" *ngIf="fromChallenge">
+                <select class="form-select" aria-label="Default select example" [(ngModel)]="RoCName"
+                    [ngModelOptions]="{standalone: true}">
+                    <label for="floatingSelect">Nombre de la Carrera</label>
+
+                    <option *ngFor="let chall of challenges; let i= index">
+                        {{chall.name}}</option>
+                </select>
+                <label for="floatingSelect">Nombre del Reto</label>
+            </div>
+
+            <div class="form-floating" *ngIf="fromRace">
+                <select class="form-select" aria-label="Default select example" [(ngModel)]="RoCName"
+                    [ngModelOptions]="{standalone: true}">
+                    <label for="floatingSelect">Nombre Carrera</label>
+
+                    <option *ngFor="let race of races; let i= index">
+                        {{race.name}}</option>
+                </select>
+                <label for="floatingSelect">Nombre Carrera</label>
+            </div>
+
+
+            <div style="margin-top:20px" *ngIf="alert" class="alert alert-{{typeAlert}} alert-dismissible" role="alert">
+                {{alertMessage}}
+                <button (click)="closeAlert()" type="button" class="btn-close" data-bs-dismiss="alert"
+                    aria-label="Close"></button>
+            </div>
+
+            <div class="mt-3 mb-5 d-grid gap-2 justify-content-center">
+                <button id="post" class="btn btn-lg btn-primary btn-block">Publicar</button>
+
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="modal fade" id="exampleModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+    aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Editar Actividad</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form [formGroup]="edit" (submit)="updateActivity()" style="max-width: 300px;margin: auto;">
+
+                    <div class="form-floating">
+                        <input required type="text" id="distance" placeholder="distance" class="form-control mb-1"
+                            formControlName="Distance">
+                        <label for="floatingInput">Distancia</label>
+                    </div>
+        
+                    <div>
+                        <label for="floatingInput">Fecha Inicio</label>
+                        <input required type="datetime-local" id="Start" class="form-control mb-2" [(ngModel)]="startUpdate"
+                            [ngModelOptions]="{standalone: true}">
+                    </div>
+        
+                    <div>
+                        <label for="floatingInput">Tiempo Actividad</label>
+                        <input required type="datetime-local" [(ngModel)]="durationUpdate" [ngModelOptions]="{standalone: true}"
+                            id="Duration" class="form-control mb-1">
+                    </div>
+        
+        
+                    <div>
+                        <label for="inputGroupFile02" class="text-left ">Ruta</label>
+                        <div class="input-group">
+                            <input required (change)="getFile($event)" type="file" accept="text/gpx" class="form-control mb-3"
+                                id="inputGroupFile02">
+                        </div>
+                    </div>
+        
+        
+                    <div class="form-floating">
+        
+                        <select class="form-select" [(ngModel)]="activityTypeUpdate" [ngModelOptions]="{standalone: true}"
+                            aria-label="Default select example">
+        
+                            <option value="Running" selected>Correr</option>
+                            <option value="Swimming">Natación</option>
+                            <option value="Cycling">Ciclismo</option>
+                            <option value="Hiking">Senderismo</option>
+                            <option value="Kayaking">Kayaking</option>
+                            <option value="Walking">Caminata</option>
+                        </select>
+                        <label for="floatingSelect">Tipo</label>
+                    </div>
+        
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="checkbox" id="inlineCheckbox1" value="Challenge"
+                            (click)="challengeUpdate($event)" >
+                        <label class="form-check-label" for="inlineCheckbox1">Reto</label>
+                    </div>
+        
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="checkbox" id="inlineCheckbox2" value="Race" 
+                        (click)="raceUpdate($event)">
+                        <label class="form-check-label" for="inlineCheckbox2">Carrera</label>
+                    </div>
+        
+                    <div class="form-floating" *ngIf="fromChallengeUpdate">
+                        <select class="form-select" aria-label="Default select example" [(ngModel)]="RoCNameUpdate"
+                            [ngModelOptions]="{standalone: true}">
+                            <label for="floatingSelect">Nombre Reto</label>
+        
+                            <option *ngFor="let chall of challenges; let i= index">
+                                {{chall.name}}</option>
+                        </select>
+                        <label for="floatingSelect">Nombre Reto</label>
+                    </div>
+        
+                    <div class="form-floating" *ngIf="fromRaceUpdate">
+                        <select class="form-select" aria-label="Default select example" [(ngModel)]="RoCNameUpdate"
+                            [ngModelOptions]="{standalone: true}">
+                            <label for="floatingSelect">Nombre Carrera</label>
+        
+                            <option *ngFor="let race of races; let i= index">
+                                {{race.name}}</option>
+                        </select>
+                        <label for="floatingSelect">Nombre Carrera</label>
+                    </div>
+        
+        
+                    <div style="margin-top:20px" *ngIf="alert" class="alert alert-{{typeAlert}} alert-dismissible" role="alert">
+                        {{alertMessage}}
+                        <button (click)="closeAlert()" type="button" class="btn-close" data-bs-dismiss="alert"
+                            aria-label="Close"></button>
+                    </div>
+        
+                    <div class="mt-3 mb-5 d-grid gap-2 justify-content-center">
+                        <button id="post" class="btn btn-lg btn-primary btn-block">Actualizar</button>
+        
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+
+            </div>
+        </div>
+    </div>
+</div>
